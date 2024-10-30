@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<button id="0" onclick="putOnEnd('0')">0</button>
+<button id="1" onclick="putOnEnd('1')">1</button>
+<button id="2" onclick="putOnEnd('2')">2</button>
+<button id="3" onclick="putOnEnd('3')">3</button>
+<button id="4" onclick="putOnEnd('4')">4</button>
+<button id="5" onclick="putOnEnd('5')">5</button>
+<button id="6" onclick="putOnEnd('6')">6</button>
+<button id="7" onclick="putOnEnd('7')">7</button>
+<button id="8" onclick="putOnEnd('8')">8</button>
+<button id="9" onclick="putOnEnd('9')">9</button>
+<button id="clear" onclick="clearText()">C</button>
+<button id="+" onclick="plus()">+</button>
+<!--Add a button for -, *, / -->
+<!--The - function is called minus(),  don't add a function for * and / -->
+<button id="=" onclick="calculate()">=</button>
+
+<br><br>
+
+
+<label>
+    <input id="number" type="text"  value = "" readonly>
+</label>
+
+<br>
+<br>
+
+<label>
+    <input id="calc" type="text"  value = "" readonly>
+</label>
+
+
+<script src="scripts.js"></script>
+</body>
+</html>
+
+
+
+
+style.css
+input {
+text-align: right;
+}
+
+
+
+script.js
+const currentCalculation = [];
+
+function putOnEnd(num) {
+let element = document.getElementById("number");
+let existingText = element.value;
+
+if (existingText === "0") {
+existingText = "";
+}
+
+let newText = existingText + num;
+console.log("Existing Text: " + existingText);
+console.log("Number is: " + num);
+element.value = newText;
+}
+
+function clearText() {
+document.getElementById("number").value = "";
+let calc = document.getElementById("calc");
+calc.value = "";
+currentCalculation.length = 0;
+}
+
+function plus() {
+let element = document.getElementById("number");
+let existingText = element.value;
+
+if (existingText === "") {
+existingText = "0";
+}
+element.value = existingText;
+currentCalculation.push(element.value);
+currentCalculation.push("+");
+let calc = document.getElementById("calc");
+calc.value = currentCalculation.join(" ");
+element.value = "";
+}
+
+function calculate() {
+let element = document.getElementById("number");
+let existingText = element.value;
+
+if (existingText === "") {
+existingText = "0";
+}
+currentCalculation.push(element.value);
+
+doTheMath();
+
+}
+
+function doTheMath() {
+let input = document.getElementById("number");
+input.value = "";
+let calc = document.getElementById("calc");
+calc.value = "";
+
+if(currentCalculation.length === 0){
+input.value = "0";
+}else if (currentCalculation.length === 1){
+input.value = currentCalculation[0];
+}else{
+let total = 0;
+let firstNum = +currentCalculation.shift();
+let operator = currentCalculation.shift();
+let secondNum = +currentCalculation.shift();
+if(operator === "+"){
+total = firstNum + secondNum;
+}else{
+total = firstNum - secondNum;
+}
+
+while(currentCalculation.length > 0){
+operator = currentCalculation.shift();
+let number = +currentCalculation.shift();
+if(operator === "+"){
+total += number;
+}else{
+total -= number;
+}
+}
+
+input.value = total;
+}
+
+
+
+}
